@@ -53,7 +53,7 @@ let collection = {
             //selling_price: { type: Number, required: true },//实际销售价格：普通价格
             discount: { type: Number, default: 0 },//折扣。指绝对数据
             vip_extra_discount: { type: Number, default: 0 },//vip的折扣。指绝对数据
-            max_coin_redeem: { type: Number, default: 0 },//最多可兑换的一合币数量
+            max_points_redeem: { type: Number, default: 0 },//最多可兑换的一合币数量
             sale_time: { type: Date, default: Date.now },//开始销售的时间
             due_time: { type: Date },//开始销售的时间
             promotion_fee: { type: Number, default: 0 }//促销佣金、手续费。指绝对数据

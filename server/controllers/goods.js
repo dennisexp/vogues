@@ -45,7 +45,7 @@ module.exports = {
         try {
             let bid = biz_content ? (JSON.parse(biz_content))['bid'] : '';
             let query = await Goods.getList(bid);
-            console.log('---getGoodsList---', query.code, query.message, query.data.length);
+            console.log('---getGoodsList---', query.code, query.message, query.data.goods.length);
             ctx.feedback(query);
         } catch (error) {
             console.log(error);

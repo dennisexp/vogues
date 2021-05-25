@@ -93,7 +93,8 @@ module.exports = {
                     pipeline: [
                         { $match: { $expr: { $and: [{ $eq: ['$bid', '$$bid'] }, { $eq: ['$status', 1] }] } } },
                         { $sort: { 'weight': -1, 'cpid': 1 } },
-                        { $project: { 'cpid': 1, 'title': 1, 'type': 1, 'quantity': 1, 'strategy': 1, 'template_id': 1, 'thumbnail_url': 1, 'description': 1, 'weight': 1 } }
+                        { $project: { 'cpid': 1, 'title': 1, 'type': 1, 'quantity': 1, 'template_id': 1, 'thumbnail_url': 1, 'description': 1, 'weight': 1, 
+                            'strategy.original_price': 1, 'strategy.discount': 1, 'strategy.vip_extra_discount': 1, 'strategy.max_points_redeem': 1 } }
                     ],
                     as: 'goods'
                 }
@@ -136,8 +137,7 @@ module.exports = {
             //     }
             // },{
                 $project: {
-                    '_id': 0, 'cpid': 1, 'title': 1, 'type': 1, 'bid': 1, 'supplier': 1,
-                    'strategy.discount': 1, 'strategy.original_price': 1,'strategy.vip_extra_discount': 1, 'strategy.max_points_redeem': 1, 
+                    '_id': 0, 'cpid': 1, 'title': 1, 'type': 1, 'bid': 1, 'supplier': 1,'strategy': 1,
                     'thumbnail_url':1, 'description': 1, 'conditions': 1, 'template_id': 1 //'template': { $cond : [{ $eq: ['$template', []] }, [''], '$template' ]}
                 }
             }
@@ -160,7 +160,7 @@ module.exports = {
             // },{
                 $project: {
                     '_id': 0, 'cpid': 1, 'title': 1, 'type': 1, 'bid': 1, 'supplier': 1, 'thumbnail_url':1, 'description': 1, 'conditions': 1,
-                    'strategy.original_price': 1, 'strategy.discount': 1, 'strategy.vip_extra_discount': 1, 'strategy.max_coin_redeem': 1, 
+                    'strategy.original_price': 1, 'strategy.discount': 1, 'strategy.vip_extra_discount': 1, 'strategy.max_points_redeem': 1, 
                     //'template': { $cond : [{ $eq: ['$template', []] }, [''], '$template' ]}
                 }
             },
