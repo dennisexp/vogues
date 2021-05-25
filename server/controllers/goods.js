@@ -45,7 +45,7 @@ module.exports = {
         try {
             let bid = biz_content ? (JSON.parse(biz_content))['bid'] : '';
             let query = await Goods.getList(bid);
-            // console.log('---query---', query);
+            console.log('---getGoodsList---', query.code, query.message, query.data.length);
             ctx.feedback(query);
         } catch (error) {
             console.log(error);
@@ -55,6 +55,7 @@ module.exports = {
 
     getCategoryList: async (ctx) => {
         let query = await Goods.getCategories();
+        console.log('---getCategoryList---', query.code, query.message, query.data.length);
         ctx.feedback(query);
     },
 
