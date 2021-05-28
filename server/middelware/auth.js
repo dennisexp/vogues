@@ -13,12 +13,7 @@ module.exports = async (ctx, next) => {
     let IP = Util.getClientIP(ctx.req);
     let method = (ctx.method).toUpperCase();
     console.log('--- start check:', 'IP:', IP, ', method:', method, ', path:', path);
-    //先查看IP是否是许可的
-    if (!verified_ip.includes(IP)) {
-        ctx.error('IP地址不在白名单中');
-        console.log('--- IP地址不在白名单中，拒绝访问：', 'IP:', IP, 'method:', method, ', path:', path);
-        return;
-    }
+    
     //去免检配置表中匹配method和url，查找是否为免权限验证的接口路径
     let onWhiteList = white_list.find(api => {
         let _path = path.endsWith('/') ? path : (path + '/');
@@ -31,6 +26,13 @@ module.exports = async (ctx, next) => {
     if (onWhiteList) {
         console.log('--- 免检放行:', 'method:', method, ', path:', path);
         await next();
+        return;
+    }
+
+    //先查看IP是否是许可的
+    if (!verified_ip.includes(IP)) {
+        ctx.error('IP地址不在白名单中');
+        console.log('--- IP地址不在白名单中，拒绝访问：', 'IP:', IP, 'method:', method, ', path:', path);
         return;
     }
 
