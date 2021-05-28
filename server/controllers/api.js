@@ -10,7 +10,7 @@ module.exports = {
         console.log('dispatch to', operate);
         switch (operate) {
         case 'get_account_info':
-            fulu_ctrl.getAccountInfo(ctx);
+            await fulu_ctrl.getAccountInfo(ctx);
             break;
             ///////----以上福禄----///////
 
