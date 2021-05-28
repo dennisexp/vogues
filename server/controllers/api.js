@@ -15,7 +15,7 @@ module.exports = {
             ///////----以上福禄----///////
 
         case 'get_category_list':
-            goods_ctrl.getCategoryList(ctx);
+            await goods_ctrl.getCategoryList(ctx);
             break;
 
         case 'get_coupon_list':
