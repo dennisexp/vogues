@@ -25,7 +25,7 @@ onerror(app);
 
 const index = require('./routes/index.js');//首页
 const api = require('./routes/api.js');
-// const mall = require('./routes/mall.js');
+const fulu = require('./routes/fulu.js');
 // const privilege = require('./routes/privilege.js');//
 // const finance = require('./routes/finance.js');
 // const user = require('./routes/user.js');//用户
@@ -35,7 +35,7 @@ const api = require('./routes/api.js');
 
 router.use(index);
 router.use('/api', api);
-// router.use('/privilege/v3', privilege);
+router.use('/fulu', fulu);
 // router.use('/finance/v3', finance);
 // router.use('/user/v3', user);
 // router.use('/mall/v3', mall);

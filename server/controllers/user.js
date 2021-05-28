@@ -9,9 +9,9 @@ module.exports = {
      * @param {*} product_id string
      * @returns { name: '一合优品', balance: 0, is_open: 1 }
      */
-    getFuluUserInfo: async (ctx) => {
-        let method = 'fulu.user.info.get';
-        let query = await Util_fulu.requestPost(method);
-        ctx.feedback(query);
-    }
+    // getFuluUserInfo: async (ctx) => {
+    //     let method = 'fulu.user.info.get';
+    //     let query = await Util_fulu.requestPost(method);
+    //     ctx.feedback(query);
+    // }
 }

@@ -1,4 +1,4 @@
-const koaRequest = require('koa2-request');
+// const koaRequest = require('koa2-request');
 const Config_Fulu = require('../config/fulu_cfg.js');
 const Util = require('./util.js');
 
@@ -15,13 +15,14 @@ module.exports = {
             return sign_info;
         }
 
-        let res = await koaRequest({
-            'url': Config_Fulu.api_gateway,
-            //'url': 'http://pre.openapi.fulu.com/api/getway',//'http://127.0.0.1:8800/fulu/notify/test',//
-            'method': 'POST',
-            'body': JSON.stringify(sign_info.data),
-            'headers': { "content-type": "application/json; charset=UTF-8" }
-        });
+        // let res = await koaRequest({
+        //     'url': Config_Fulu.api_gateway,
+        //     //'url': 'http://pre.openapi.fulu.com/api/getway',//'http://127.0.0.1:8800/fulu/notify/test',//
+        //     'method': 'POST',
+        //     'body': JSON.stringify(sign_info.data),
+        //     'headers': { "content-type": "application/json; charset=UTF-8" }
+        // });
+        let res = await Util.requestPost(Config_Fulu.api_gateway, sign_info.data);
 
         try {
             let body = JSON.parse(res.body);
@@ -80,4 +81,12 @@ module.exports = {
         return Util.md5Hash(new_str).toLowerCase();
     },
 
+    //回掉验证签名
+    verify_sign(request_body){
+        let sign = request_body.sign;
+        delete request_body.sign;
+        let new_sign = this.sign(JSON.stringify(request_body));
+        // console.log('new_sign', new_sign, sign);
+        return sign==new_sign ? true : false; 
+    }
 }

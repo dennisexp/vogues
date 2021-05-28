@@ -36,7 +36,7 @@ module.exports = {
             }
 
             list.push({
-                cpid: item.product_id,
+                gid: item.product_id,
                 title: item.product_name,
                 type: (item.product_type=='直充' ? 'TOPUP' : (item.product_type=='卡密' ? 'CDKEY':'OTHER')),
                 bid: item.bid,
@@ -92,8 +92,8 @@ module.exports = {
                     let: { 'bid': '$cid' },
                     pipeline: [
                         { $match: { $expr: { $and: [{ $eq: ['$bid', '$$bid'] }, { $eq: ['$status', 1] }] } } },
-                        { $sort: { 'weight': -1, 'cpid': 1 } },
-                        { $project: { 'cpid': 1, 'title': 1, 'type': 1, 'quantity': 1, 'template_id': 1, 'thumbnail_url': 1, 'description': 1, 'weight': 1, 
+                        { $sort: { 'weight': -1, 'gid': 1 } },
+                        { $project: { 'gid': 1, 'title': 1, 'type': 1, 'quantity': 1, 'template_id': 1, 'thumbnail_url': 1, 'description': 1, 'weight': 1, 
                             'strategy.original_price': 1, 'strategy.discount': 1, 'strategy.vip_extra_discount': 1, 'strategy.max_points_redeem': 1 } }
                     ],
                     as: 'goods'
@@ -115,7 +115,7 @@ module.exports = {
             { $project: { 'bid': 1, 'label': 1, 'goods': 1, 'template': { $cond : [{ $eq: ['$template', []] }, [''], '$template' ]} } },
             { $unwind: '$template' },
             { $sort: { 'goods.weight': -1 } },
-            { $project: { 'bid': 1, 'label': 1, 'goods.template': '$template', 'goods.cpid': 1, 'goods.title': 1, 'goods.type': 1, 'goods.quantity': 1, 'goods.strategy': 1, 'goods.thumbnail_url': 1, 'goods.description': 1 } },
+            { $project: { 'bid': 1, 'label': 1, 'goods.template': '$template', 'goods.gid': 1, 'goods.title': 1, 'goods.type': 1, 'goods.quantity': 1, 'goods.strategy': 1, 'goods.thumbnail_url': 1, 'goods.description': 1 } },
             { $group:{ _id: { 'bid':'$bid', 'label': '$label' }, 'goods': { $push: '$goods'  } } },
             { $project: { '_id': 0, 'bid': '$_id.bid', 'label': '$_id.label', 'goods': 1  } },
         ];
@@ -125,9 +125,9 @@ module.exports = {
         return (query.code=='200' && query.data  && bid) ? Util.fb.ok(query.data[0]) : query;
     },
 
-    async getInfo(cpid){
+    async getInfo(gid){
         let condition = [
-            { $match: { 'cpid': +cpid, 'status': 1 } },
+            { $match: { 'gid': +gid, 'status': 1 } },
             {
             //     $lookup: {
             //         from: 'topup_templates',
@@ -137,7 +137,7 @@ module.exports = {
             //     }
             // },{
                 $project: {
-                    '_id': 0, 'cpid': 1, 'title': 1, 'type': 1, 'bid': 1, 'supplier': 1,'strategy': 1,
+                    '_id': 0, 'gid': 1, 'title': 1, 'type': 1, 'bid': 1, 'supplier': 1,'strategy': 1,
                     'thumbnail_url':1, 'description': 1, 'conditions': 1, 'template_id': 1 //'template': { $cond : [{ $eq: ['$template', []] }, [''], '$template' ]}
                 }
             }
@@ -147,9 +147,9 @@ module.exports = {
         return (code=='200' && data.length>0) ? Util.fb.ok(data[0]) : Util.fb.fail('无商品');
     },
 
-    async getInfo4Customer(cpid){
+    async getInfo4Customer(gid){
         let condition = [
-            { $match: { 'cpid': +cpid, 'status': 1 } },
+            { $match: { 'gid': +gid, 'status': 1 } },
             {
             //     $lookup: {
             //         from: 'topup_templates',
@@ -159,7 +159,7 @@ module.exports = {
             //     }
             // },{
                 $project: {
-                    '_id': 0, 'cpid': 1, 'title': 1, 'type': 1, 'bid': 1, 'supplier': 1, 'thumbnail_url':1, 'description': 1, 'conditions': 1,
+                    '_id': 0, 'gid': 1, 'title': 1, 'type': 1, 'bid': 1, 'supplier': 1, 'thumbnail_url':1, 'description': 1, 'conditions': 1,
                     'strategy.original_price': 1, 'strategy.discount': 1, 'strategy.vip_extra_discount': 1, 'strategy.max_points_redeem': 1, 
                     //'template': { $cond : [{ $eq: ['$template', []] }, [''], '$template' ]}
                 }
@@ -170,22 +170,13 @@ module.exports = {
         return (code=='200' && data.length>0) ? Util.fb.ok(data[0]) : Util.fb.fail('无商品');
     },
 
-    async getOriginalPrice(cpid){
+    async getOriginalPrice(gid){
         let condition = [
-            { $match: { 'cpid': +cpid, 'status': 1 } },
-            { $project: { 'cpid': 1, 'title': 1, 'original_price': '$strategy.original_price' } }
+            { $match: { 'gid': +gid, 'status': 1 } },
+            { $project: { 'gid': 1, 'title': 1, 'original_price': '$strategy.original_price' } }
         ]
         let { code, data } = await MongoDB.aggregate('goods', condition);
         return (code=='200' && data.length>0) ? Util.fb.ok(data[0]) : Util.fb.fail('无商品');
-    },
-
-    async getGoodsTemplateInfoFromFulu(template_id){
-        if (!template_id) {
-            return Util.fb.fail('参数错误');
-        }
-        let method = 'fulu.goods.template.get';
-        let biz_content = { 'template_id': template_id }
-        return await Util_fulu.requestPost(method, biz_content);
     },
 
     async getGoodsTemplateInfo(template_id){
@@ -199,6 +190,8 @@ module.exports = {
 
     async batchSaveTemplates(templates){
         return await MongoDB.insertMany('topup_template', templates);
-    }
+    },
+
+
 
 };

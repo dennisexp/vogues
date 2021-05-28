@@ -1,4 +1,4 @@
-// const koaRequest = require('koa2-request');
+const koaRequest = require('koa2-request');
 
 const DATA_ELEMENT = require('./data_element.js');
 const DATE_TIME = require('./date_time.js');
@@ -26,6 +26,17 @@ module.exports = {
             req.socket.remoteAddress ||
             req.connection.socket.remoteAddress;
     },
+
+    async requestPost(url, body){
+        return await koaRequest({
+            'url': url,
+            'method': 'POST',
+            'body': JSON.stringify(body),
+            'headers': { "content-type": "application/json; charset=UTF-8" }
+        });
+    }
+
+    
 
     
 }

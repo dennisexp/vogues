@@ -6,7 +6,7 @@
 
 const Util = require('../services/util.js');
 //免检的白名单
-const { verified_ip, white_list, verified_app } = require('../config/auth_cfg.js');
+const { verified_ip, white_list, verified_operator } = require('../config/auth_cfg.js');
 
 module.exports = async (ctx, next) => {
     let path = ctx.path;
@@ -61,7 +61,7 @@ module.exports = async (ctx, next) => {
 
         let app_id = params.app_id;
         //查查app_id是否授权名单中
-        let info = verified_app.find(info => {
+        let info = verified_operator.find(info => {
             return (app_id == info.app_id);
         });
 
@@ -109,7 +109,7 @@ module.exports = async (ctx, next) => {
             return;
         }
 
-        ctx.state.app_info = { 'app_id': app_id, 'app_name': info.app_name };//全局保持用户信息
+        ctx.state.operator = info;//全局保持用户信息
         console.log('--- 验签通过，继续处理请求：', 'method:', method, ', path:', path);
         await next();
 

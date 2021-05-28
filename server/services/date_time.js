@@ -74,6 +74,10 @@ module.exports = {
 
         return date;
     },
+
+    getDate(date){
+        return new Date(date);
+    },
     
     /**
      * 已经移动

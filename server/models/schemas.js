@@ -8,10 +8,11 @@ const mongoose=require('mongoose');
  */
 let collection = {
 
-    user: {
-        uid: { type: Number, unique: true },
-        nickname: { type: String, unique: true, trim: true },   //登录的用户名，须唯一
-        name: { type: String, required: true, trim: true },   //名程
+    operator: {
+        opid: { type: Number, unique: true },
+        app_id: { type: String, unique: true, trim: true },   //登录的用户名，须唯一
+        app_name: { type: String, required: true, trim: true },   //名程
+        name: { type: String, trim: true },   //名程
         salt: { type: String, default: '3.1415926' },
         status: { type: Number, default: 1 },//0未激活，1正常，-1永久销号
         balance: {
@@ -41,7 +42,7 @@ let collection = {
 
     //品牌卡券
     goods: {
-        cpid: { type: Number, unique: true },//优惠券的id
+        gid: { type: Number, unique: true },//优惠券的id
         title: { type: String, required: true },//名称
         type: { type: String, default: 'TOPUP', uppercase:true }, //卡密CDKEY，直充TOPUP
         bid: { type: Number, required: true, default: 0 },//优惠券的品牌分类id
@@ -50,7 +51,7 @@ let collection = {
         strategy: {
             original_price: { type: Number, required: true },//官方原价/面值
             purchase_price: { type: Number, required: true },//进货价/成本
-            //selling_price: { type: Number, required: true },//实际销售价格：普通价格
+            // selling_price: { type: Number, required: true },//实际销售价格：普通价格
             discount: { type: Number, default: 0 },//折扣。指绝对数据
             vip_extra_discount: { type: Number, default: 0 },//vip的折扣。指绝对数据
             max_points_redeem: { type: Number, default: 0 },//最多可兑换的一合币数量
@@ -126,6 +127,29 @@ let collection = {
         params: { type: String }
     },
 
+    order: {
+        oid: { type: String, unique: true, trim: true },
+        app_id: { type: String, required: true },//operator 的 appid 
+        trade_no: { type: String, required: true, trim: true },
+        sys_order_id: { type: String, trim: true },//外部系统发过来的订单号
+        topup_account: { type: String, trim: true },
+        order_type: { type: Number },//订单类型：1-话费 2-流量 3-卡密 4-直充
+        gid: { type: Number, required: true },
+        goods_title: { type: String, default: '' },
+        order_price: { type: Number, default: 0 },
+        quantity: { type: Number, default: 1 },
+        status: { type: String, default: 'untreated' },//订单状态： （success：成功，processing：处理中，failed：失败，untreated：未处理）
+        operator_serial_number: { type: String, default: '' },//运营商流水号
+        order_time: { type: Date, default: Date.now },  //时间
+        finish_time: { type: Date },  //时间
+        // notify2merchant: { type: Number, default: 0 },//0 不需要通知，1需要通知， 2通知完成
+        display: {
+            for_merchant: { type: Number, default: 1 },//默认显示
+            for_system: { type: Number, default: 1 },//默认显示
+        },
+        description: { type: String, default: '' }
+    },
+
     /**
      * 短信验证码发送记录
      */
@@ -176,10 +200,11 @@ module.exports = {
     category: mongoose.model('category', collection['category'], 'categories'),
     goods: mongoose.model('goods', collection['goods'], 'goods'),
     topup_template: mongoose.model('topup_template', collection['topup_template'], 'topup_templates'),
+    order: mongoose.model('order', collection['order'], 'orders'),
 
     smscode: mongoose.model('smscode', collection['smscode'], 'u_smscodes'),
     payment: mongoose.model('payment', collection['payment'], 'u_payments'),
-    user: mongoose.model('user', collection['user'], 'u_users'),
+    operator: mongoose.model('operator', collection['operator'], 'u_operators'),
 
     serial_code: mongoose.model('serial_code', collection['serial_code'], 'sys_serial_codes'),
     outgoing: mongoose.model('outgoing', collection['outgoing'], 'sys_outgoing'),

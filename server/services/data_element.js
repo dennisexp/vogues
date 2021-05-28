@@ -2,7 +2,7 @@ const Moment = require('moment');
 const crypto = require('crypto');//
 // const Config = require('../config/env_cfg.js');
 // const feedback = require('./feedback.js');
-const { verified_app } = require('../config/auth_cfg.js');
+const { verified_operator } = require('../config/auth_cfg.js');
 
 module.exports = {
 
@@ -10,7 +10,7 @@ module.exports = {
         if (!params || !app_id) {
             return false;
         }
-        let info = verified_app.find(info => {
+        let info = verified_operator.find(info => {
             return (app_id == info.app_id);
         });
 
@@ -45,7 +45,7 @@ module.exports = {
         if (!sign || !app_id) {
             return false;
         }
-        let info = verified_app.find(info => {
+        let info = verified_operator.find(info => {
             return (app_id == info.app_id);
         });
 

@@ -1,42 +1,36 @@
 
-const user_ctrl = require('./user.js');
+// const user_ctrl = require('./user.js');
 const goods_ctrl = require('./goods.js');
-
+const order_ctrl = require('./order.js');
+const fulu_ctrl = require('./fulu.js');
 
 module.exports = {
     dispatch: async (ctx) => {
-        console.log('this is dispatch center');
         let operate = (ctx.request.body.operate).toLowerCase();
+        console.log('dispatch to', operate);
         switch (operate) {
         case 'get_account_info':
-            await user_ctrl.getFuluUserInfo(ctx);
+            fulu_ctrl.getAccountInfo(ctx);
             break;
+            ///////----以上福禄----///////
 
         case 'get_category_list':
-            await goods_ctrl.getCategoryList(ctx);
+            goods_ctrl.getCategoryList(ctx);
             break;
 
         case 'get_coupon_list':
         case 'get_goods_list':
-            await goods_ctrl.getGoodsList(ctx);
+            goods_ctrl.getGoodsList(ctx);
             break;
         
-        case 'get_coupon_from_fulu':
-            await goods_ctrl.getInfoFromFulu(ctx);
-            break;
-
         case 'get_goods_info':
-            await goods_ctrl.getInfo(ctx);
-            break;
-
-        case 'get_all_templates':
-            await goods_ctrl.getAllTemplatesFromFulu(ctx);
+            goods_ctrl.getInfo(ctx);
             break;
 
         case 'topup':
-            await goods_ctrl.topup(ctx);
+            // return ctx.error('货源维护中，24小时后再试');
+            order_ctrl.topup(ctx);
             break;
-
 
         default:
             ctx.error('未知的操作')
