@@ -128,7 +128,7 @@ module.exports = {
         if (!verify) {
             console.log('订单回调签名错误，详情：', body);
             logHandle('订单回调签名错误，详情：'+ JSON.stringify(body));
-            return 'fail';
+            return ctx.body = 'fail';
         }
         
         //先验证签名
@@ -150,11 +150,11 @@ module.exports = {
         if (code!='200') {
             console.log('订单更新错误，详情：', body);
             logHandle('订单更新错误，详情：'+ JSON.stringify(body));
-            return 'fail';
+            return ctx.body = 'fail';
         };
 
         // console.log(code, data);
-        ctx.body = 'success';
+        
         let operator = verified_operator.find(info => {
             return (data.app_id == info.app_id);
         });
@@ -166,5 +166,7 @@ module.exports = {
         // console.log('data 2', info);
         //通知运营商
         Util.requestPost(operator.order_notify_url, info);
-    },
+        
+        ctx.body = 'success';
+    },  
 }
