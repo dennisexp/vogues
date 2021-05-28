@@ -20,16 +20,16 @@ module.exports = {
 
         case 'get_coupon_list':
         case 'get_goods_list':
-            goods_ctrl.getGoodsList(ctx);
+            await goods_ctrl.getGoodsList(ctx);
             break;
         
         case 'get_goods_info':
-            goods_ctrl.getInfo(ctx);
+            await goods_ctrl.getInfo(ctx);
             break;
 
         case 'topup':
             // return ctx.error('货源维护中，24小时后再试');
-            order_ctrl.topup(ctx);
+            await order_ctrl.topup(ctx);
             break;
 
         default:
