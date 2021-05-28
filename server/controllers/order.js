@@ -1,5 +1,6 @@
 const { logHandle } = require('../middelware/log4.js');
 const Order = require('../models/order.js');
+const Goods = require('../models/goods.js');
 const Config_fulu = require('../config/fulu_cfg.js');
 const Util = require('../services/util.js'); 
 const Util_fulu = require('../services/fulu_util.js');
