@@ -107,8 +107,9 @@ module.exports = {
 
     //订单回调地址
     orderNotify: async (ctx) => {
-        console.log(ctx.request.query);
-        let body = ctx.request.query;
+        console.log('-----orderNotify-----');
+        console.log(ctx.request.body);
+        let body = ctx.request.body;
         // body = {
         //     order_id: '21052527311827521558',
         //     charge_finish_time: '2021-05-25 16:02:04',

@@ -6,7 +6,6 @@ const order_ctrl = require('../controllers/order.js');
 
 //订单回调地址
 router.post('/notify/order', order_ctrl.orderNotify);
-router.get('/notify/order', order_ctrl.orderNotify);
 
 //对账单回调地址
 router.post('/notify/bill', fulu_ctrl.billNotify);
