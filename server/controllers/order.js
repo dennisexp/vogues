@@ -133,7 +133,6 @@ module.exports = {
         
         //先验证签名
         let sys_order_id = body.order_id;
-        let gid = +body.product_id;
         let trade_no = body.customer_order_no;
 
         let feedback = {
@@ -145,7 +144,7 @@ module.exports = {
             'operator_serial_number': body.operator_serial_number
         }
 
-        let condition = { 'sys_order_id': sys_order_id, 'gid': gid, 'trade_no': trade_no };
+        let condition = { 'sys_order_id': sys_order_id, 'trade_no': trade_no };
         let { code, data } = await Order.update(condition, feedback);
         if (code!='200') {
             console.log('订单更新错误，详情：', body);
