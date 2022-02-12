@@ -28,6 +28,7 @@ server/config/fulu_cfg.js
 server/public/
 server/node_modules/
 
+db/
 logs/
 tmp/
 temp/
